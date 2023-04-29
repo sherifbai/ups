@@ -9,7 +9,8 @@ import {
 import { UserService } from '@app/modules/user/user.service';
 import { PaginationDto } from '@app/common/dto/pagination.dto';
 import { AuthGuard } from '@app/modules/auth/guard/auth.gurd';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { UserResponse } from '@app/modules/user/types/user.response';
 
 @ApiTags('Users')
 @UseGuards(AuthGuard)
@@ -17,9 +18,10 @@ import { ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiBody({ type: UserResponse })
   @Get()
   @HttpCode(HttpStatus.OK)
-  async users(@Query() query: PaginationDto) {
+  async users(@Query() query: PaginationDto): Promise<UserResponse> {
     return this.userService.users(query);
   }
 }

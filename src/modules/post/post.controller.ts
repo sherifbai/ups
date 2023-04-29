@@ -12,9 +12,10 @@ import {
 import { CreatePostDto } from '@app/modules/post/dto/create.post.dto';
 import { User } from '@app/common/decorators/user.decorator';
 import { AuthGuard } from '@app/modules/auth/guard/auth.gurd';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JtwPayloadInterface } from '@app/common/interfaces/jtw.payload.interface';
 import { PaginationDto } from '@app/common/dto/pagination.dto';
+import { PostResponse } from '@app/modules/post/types/post.response';
 
 @UseGuards(AuthGuard)
 @ApiTags('Posts')
@@ -28,9 +29,10 @@ export class PostController {
     return this.postService.create({ ...data, userId: user.sub });
   }
 
+  @ApiResponse({ type: PostResponse })
   @Get()
   @HttpCode(HttpStatus.OK)
-  async posts(@Query() query: PaginationDto) {
+  async posts(@Query() query: PaginationDto): Promise<PostResponse> {
     return this.postService.posts(query);
   }
 }

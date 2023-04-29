@@ -2,12 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@app/prisma/prisma.service';
 import { PaginationDto } from '@app/common/dto/pagination.dto';
 import { createPagination } from '@app/common/helper/pagination';
+import { UserResponse } from '@app/modules/user/types/user.response';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async users(data: PaginationDto) {
+  async users(data: PaginationDto): Promise<UserResponse> {
     const count = await this.prisma.user.count();
     const pagination = createPagination({
       count,
@@ -18,6 +19,7 @@ export class UserService {
     const users = await this.prisma.user.findMany({
       select: {
         email: true,
+        mediumMark: true,
       },
       skip: pagination.skip,
       take: pagination.take,

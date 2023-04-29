@@ -3,6 +3,7 @@ import { PrismaService } from '@app/prisma/prisma.service';
 import { CreatePostDto } from '@app/modules/post/dto/create.post.dto';
 import { createPagination } from '@app/common/helper/pagination';
 import { PaginationDto } from '@app/common/dto/pagination.dto';
+import { PostResponse } from '@app/modules/post/types/post.response';
 
 @Injectable()
 export class PostService {
@@ -27,7 +28,7 @@ export class PostService {
     });
   }
 
-  async posts(data: PaginationDto) {
+  async posts(data: PaginationDto): Promise<PostResponse> {
     const count = await this.prisma.post.count();
     const pagination = createPagination({
       count,
