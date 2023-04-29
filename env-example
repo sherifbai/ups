@@ -1,0 +1,5 @@
+APP_PORT=3000
+NODE_ENV=dev | prod
+
+DATABASE_URL=file:./ups.db
+JWT_SECRET=secret
