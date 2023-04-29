@@ -25,6 +25,7 @@ export class UserService {
 
     return {
       data: users,
+      totalCount: count,
       totalPage: pagination.totalPage,
     };
   }
