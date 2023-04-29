@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  mediumMark Float    @default(0) @map("medium_mark")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  posts     Post[]
+  postMarks PostsMark[]
+
+  @@map("users")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  mediumMark Float    @default(0) @map("meduim_mark")
+  userId     Int      @map("user_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user      User        @relation(fields: [userId], references: [id])
+  postMarks PostsMark[]
+
+  @@map("posts")
+}
+
+model PostsMark {
+  id     Int @id @default(autoincrement())
+  mark   Int
+  postId Int @map("post_id")
+  userId Int @map("user_id")
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("posts_marks")
+}
