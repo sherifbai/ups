@@ -48,5 +48,6 @@ model PostsMark {
   post Post @relation(fields: [postId], references: [id])
   user User @relation(fields: [userId], references: [id])
 
+  @@unique([userId, postId])
   @@map("posts_marks")
 }

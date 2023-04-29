@@ -1,4 +1,4 @@
-export interface JtwPayloadInterface {
+export interface JwtPayloadInterface {
   sub: number;
   email: string;
   iat: number;

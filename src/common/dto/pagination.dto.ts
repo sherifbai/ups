@@ -24,5 +24,5 @@ export class PaginationDto {
 
     return perPage;
   })
-  perPage?: number = 100;
+  perPage?: number = 10;
 }

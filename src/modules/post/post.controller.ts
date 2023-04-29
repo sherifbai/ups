@@ -5,6 +5,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Query,
   UseGuards,
@@ -13,7 +15,7 @@ import { CreatePostDto } from '@app/modules/post/dto/create.post.dto';
 import { User } from '@app/common/decorators/user.decorator';
 import { AuthGuard } from '@app/modules/auth/guard/auth.gurd';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JtwPayloadInterface } from '@app/common/interfaces/jtw.payload.interface';
+import { JwtPayloadInterface } from '@app/common/interfaces/jwt.payload.interface';
 import { PaginationDto } from '@app/common/dto/pagination.dto';
 import { PostResponse } from '@app/modules/post/types/post.response';
 
@@ -25,8 +27,11 @@ export class PostController {
 
   @Post()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async create(@Body() data: CreatePostDto, @User() user: JtwPayloadInterface) {
-    return this.postService.create({ ...data, userId: user.sub });
+  async create(
+    @Body() data: CreatePostDto,
+    @User() user: JwtPayloadInterface,
+  ): Promise<void> {
+    return this.postService.create({ ...data, id: user.sub });
   }
 
   @ApiResponse({ type: PostResponse })
@@ -34,5 +39,11 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   async posts(@Query() query: PaginationDto): Promise<PostResponse> {
     return this.postService.posts(query);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async post(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.post({ id });
   }
 }
